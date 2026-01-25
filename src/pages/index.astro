@@ -16,17 +16,18 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 	<body class="bg-[#021336] text-white font-sans">
 		<main class="max-w-5xl mx-auto p-8">
 			<section
-				class="min-h-[80vh] flex items-center justify-center py-16"
+				class="min-h-[90vh] md:min-h-[80vh] flex items-center justify-center py-10 md:py-16"
 			>
-				<div class="grid md:grid-cols-2 gap-12 items-center">
-					<div class="relative group mx-auto md:mx-0">
+				<div
+					class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
+				>
+					<div class="relative group mx-auto order-1 md:order-1">
 						<div
-							class="absolute -inset-1 bg-gradient-to-r from-[#50C878] to-purple-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"
+							class="absolute -inset-1 bg-gradient-to-r from-[#50C878] to-purple-600 rounded-full blur opacity-25"
 						>
 						</div>
-
 						<div
-							class="relative w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800"
+							class="relative w-48 h-48 sm:w-64 sm:h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800"
 						>
 							<img
 								src="/photoFabian03.png"
@@ -35,86 +36,53 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 								style="object-position: 90% 10%;"
 							/>
 						</div>
-
 						<div
-							class="absolute bottom-4 -right-4 bg-slate-900/90 border border-slate-700 p-3 rounded-xl backdrop-blur-sm shadow-xl"
+							class="absolute bottom-2 -right-2 md:bottom-4 md:-right-4 bg-slate-900/90 border border-slate-700 p-2 md:p-3 rounded-xl backdrop-blur-sm shadow-xl"
 						>
 							<p
-								class="text-xs text-gray-400 uppercase font-bold tracking-wider"
+								class="text-[10px] md:text-xs text-gray-400 uppercase font-bold tracking-wider"
 							>
 								Experiencia
 							</p>
-							<p class="text-xl font-bold text-[#50C878]">
+							<p
+								class="text-lg md:text-xl font-bold text-[#50C878]"
+							>
 								5+ Años
 							</p>
 						</div>
 					</div>
 
-					<div class="text-left">
+					<div class="text-center md:text-left order-2 md:order-2">
 						<h1
-							class="text-5xl md:text-6xl font-bold mb-2 bg-gradient-to-r from-[#50C878] to-purple-500 text-transparent bg-clip-text"
+							class="text-4xl md:text-6xl font-bold mb-2 bg-gradient-to-r from-[#50C878] to-purple-500 text-transparent bg-clip-text leading-tight"
 						>
 							{nombre}
 						</h1>
 						<p
-							class="text-xl text-[#50C878]/80 font-medium mb-6 uppercase tracking-widest text-sm"
+							class="text-lg md:text-xl text-[#50C878]/80 font-medium mb-6 uppercase tracking-widest text-sm"
 						>
 							{titulo}
 						</p>
-						<p class="text-gray-300 text-lg leading-relaxed mb-6">
-							Especialista en <strong>IA Conversacional</strong>
-							transformando la experiencia del cliente con LLMs y arquitecturas
-							RAG. He liderado la implementación de soluciones con <strong
-								>Kore.ai</strong
-							> para el sector bancario en toda Latinoamérica.
+						<p
+							class="text-gray-300 text-base md:text-lg leading-relaxed mb-6 px-2 md:px-0"
+						>
+							Especialista en <strong>IA Conversacional</strong> transformando
+							la experiencia del cliente con LLMs y arquitecturas RAG.
 						</p>
-						<div class="flex flex-wrap gap-2 mb-8">
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>Python</span
-							>
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>LLMs</span
-							>
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>Kore.ai</span
-							>
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>NLP</span
-							>
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>Voice AI (ASR/TTS)</span
-							>
-							<span
-								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
-								>SIP Integration</span
-							>
-						</div>
 
-						<div class="flex gap-4">
+						<div
+							class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
+						>
 							<a
 								href="#proyectos"
-								class="bg-[#40a160] hover:bg-[#40a160]/80 text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-[#50C878]/20"
+								class="bg-[#40a160] text-white px-8 py-3 rounded-full font-medium text-center"
+								>Ver Proyectos</a
 							>
-								Ver Proyectos
-							</a>
-							<a
-								href="/CV_Fabian_Mendez.pdf"
-								download="CV_Fabian_Mendez_AI_Architect.pdf"
-								class="border border-slate-600 hover:border-white text-white px-8 py-3 rounded-full font-medium transition-all"
-							>
-								CV
-							</a>
 							<a
 								href="#contacto"
-								class="border border-slate-600 hover:border-white text-white px-8 py-3 rounded-full font-medium transition-all"
+								class="border border-slate-600 text-white px-8 py-3 rounded-full font-medium text-center"
+								>Contactar</a
 							>
-								Contactar
-							</a>
 						</div>
 					</div>
 				</div>
@@ -177,7 +145,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 
 				<div class="grid gap-8">
 					<div
-						class="group relative bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
+						class="group relative bg-slate-800/50 p-5 md:p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
 					>
 						<div
 							class="flex flex-col md:flex-row justify-between mb-4"
@@ -600,7 +568,10 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 					</p>
 				</div>
 			</section>
-			<section id="contacto" class="py-20 border-t border-slate-800">
+			<section
+				id="contacto"
+				class="py-20 border-t border-slate-800 px-4 md:px-0"
+			>
 				<div class="max-w-2xl mx-auto">
 					<div class="text-center mb-12">
 						<h2 class="text-3xl font-bold text-white mb-4">
