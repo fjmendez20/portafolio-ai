@@ -1,0 +1,734 @@
+---
+// src/pages/index.astro
+
+import "../styles/global.css";
+
+const nombre = "Fabian Mendez";
+const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{nombre} - Portafolio</title>
+	</head>
+	<body class="bg-[#021336] text-white font-sans">
+		<main class="max-w-5xl mx-auto p-8">
+			<section
+				class="min-h-[80vh] flex items-center justify-center py-16"
+			>
+				<div class="grid md:grid-cols-2 gap-12 items-center">
+					<div class="relative group mx-auto md:mx-0">
+						<div
+							class="absolute -inset-1 bg-gradient-to-r from-[#50C878] to-purple-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"
+						>
+						</div>
+
+						<div
+							class="relative w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-2 border-slate-700 bg-slate-800"
+						>
+							<img
+								src="/photoFabian03.png"
+								alt={nombre}
+								class="w-full h-full object-cover object-center"
+								style="object-position: 90% 10%;"
+							/>
+						</div>
+
+						<div
+							class="absolute bottom-4 -right-4 bg-slate-900/90 border border-slate-700 p-3 rounded-xl backdrop-blur-sm shadow-xl"
+						>
+							<p
+								class="text-xs text-gray-400 uppercase font-bold tracking-wider"
+							>
+								Experiencia
+							</p>
+							<p class="text-xl font-bold text-[#50C878]">
+								5+ Años
+							</p>
+						</div>
+					</div>
+
+					<div class="text-left">
+						<h1
+							class="text-5xl md:text-6xl font-bold mb-2 bg-gradient-to-r from-[#50C878] to-purple-500 text-transparent bg-clip-text"
+						>
+							{nombre}
+						</h1>
+						<p
+							class="text-xl text-[#50C878]/80 font-medium mb-6 uppercase tracking-widest text-sm"
+						>
+							{titulo}
+						</p>
+						<p class="text-gray-300 text-lg leading-relaxed mb-6">
+							Especialista en <strong>IA Conversacional</strong>
+							transformando la experiencia del cliente con LLMs y arquitecturas
+							RAG. He liderado la implementación de soluciones con <strong
+								>Kore.ai</strong
+							> para el sector bancario en toda Latinoamérica.
+						</p>
+						<div class="flex flex-wrap gap-2 mb-8">
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>Python</span
+							>
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>LLMs</span
+							>
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>Kore.ai</span
+							>
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>NLP</span
+							>
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>Voice AI (ASR/TTS)</span
+							>
+							<span
+								class="text-[10px] bg-white/5 border border-white/10 px-2 py-1 rounded text-gray-400 uppercase"
+								>SIP Integration</span
+							>
+						</div>
+
+						<div class="flex gap-4">
+							<a
+								href="#proyectos"
+								class="bg-[#40a160] hover:bg-[#40a160]/80 text-white px-8 py-3 rounded-full font-medium transition-all transform hover:scale-105 shadow-lg shadow-[#50C878]/20"
+							>
+								Ver Proyectos
+							</a>
+							<a
+								href="/CV_Fabian_Mendez.pdf"
+								download="CV_Fabian_Mendez_AI_Architect.pdf"
+								class="border border-slate-600 hover:border-white text-white px-8 py-3 rounded-full font-medium transition-all"
+							>
+								CV
+							</a>
+							<a
+								href="#contacto"
+								class="border border-slate-600 hover:border-white text-white px-8 py-3 rounded-full font-medium transition-all"
+							>
+								Contactar
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="mb-16">
+				<h2
+					class="text-3xl font-bold mb-6 border-b border-gray-700 pb-2"
+				>
+					Tech Stack
+				</h2>
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						Python
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						Kore.ai
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						LLMs & RAG
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						Chatbot Design
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						JavaScript
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						LangGraph
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						Legacy Fundamentals
+					</div>
+					<div
+						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
+					>
+						Web Fundamentals
+					</div>
+				</div>
+			</section>
+
+			<section id="proyectos" class="mt-20">
+				<h2 class="text-3xl font-bold mb-10 flex items-center gap-3">
+					<span class="bg-[#50C878] w-2 h-8 rounded-full"></span>
+					Proyectos e Impacto
+				</h2>
+
+				<div class="grid gap-8">
+					<div
+						class="group relative bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
+					>
+						<div
+							class="flex flex-col md:flex-row justify-between mb-4"
+						>
+							<h3
+								class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
+							>
+								Arquitectura RAG & Evaluación con RAGAS
+							</h3>
+							<span
+								class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
+							>
+								Sybven | Regional
+							</span>
+						</div>
+						<p class="text-gray-400 mb-6 leading-relaxed">
+							Lideré el diseño de arquitecturas escalables basadas
+							en <strong>RAG</strong>. Implementé un framework de
+							evaluación avanzada utilizando <strong>RAGAS</strong
+							>, midiendo métricas críticas como <em
+								>Faithfulness</em
+							>, <em>Answer Relevance</em> y <em
+								>Context Precision</em
+							> para optimizar el rendimiento de LLMs en el sector banca.
+						</p>
+						<div class="flex flex-wrap gap-3 mb-6">
+							<span
+								class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+								>Python</span
+							>
+							<span
+								class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+								>RAGAS Framework</span
+							>
+							<span
+								class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+								>Vector Databases</span
+							>
+						</div>
+					</div>
+
+					<div
+						id="extra-projects"
+						class="hidden opacity-0 translate-y-4 transition-all duration-500 ease-out contents"
+					>
+						<div
+							class="group relative bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
+						>
+							<div
+								class="flex flex-col md:flex-row justify-between mb-4"
+							>
+								<h3
+									class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
+								>
+									Implementación de Voicebots & Telefonía IP
+								</h3>
+								<span
+									class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
+								>
+									Voice AI Specialist
+								</span>
+							</div>
+							<p class="text-gray-400 mb-6 leading-relaxed">
+								Diseño y despliegue de asistentes virtuales de
+								voz integrando modelos de <strong>ASR</strong> y <strong
+									>TTS</strong
+								>. Implementé soluciones robustas mediante
+								protocolos <strong>SIP</strong> para integración de
+								voz sobre IP, permitiendo interacciones fluidas en
+								canales telefónicos corporativos.
+							</p>
+							<div class="flex flex-wrap gap-3 mb-6">
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>ASR / TTS</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>SIP Protocol</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>VoIP</span
+								>
+							</div>
+						</div>
+						<div
+							class="group relative bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
+						>
+							<div
+								class="flex flex-col md:flex-row justify-between mb-4"
+							>
+								<h3
+									class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
+								>
+									Ecosistema Conversacional Enterprise
+								</h3>
+								<span
+									class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
+								>
+									Kore.ai Specialist
+								</span>
+							</div>
+							<p class="text-gray-400 mb-6 leading-relaxed">
+								Desarrollo avanzado de chatbots utilizando
+								<strong>Kore.ai</strong> y <strong
+									>JavaScript</strong
+								>. Implementé flujos de datos complejos mediante
+								integraciones con <strong>Salesforce</strong>,
+								<strong>Zendesk</strong> y <strong
+									>Genesys</strong
+								>, optimizando la CX (Customer Experience) a
+								través de sistemas NLU/NLP contextuales.
+							</p>
+							<div class="flex flex-wrap gap-3 mb-6">
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>Kore.ai</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>JavaScript</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>API Restful</span
+								>
+							</div>
+						</div>
+
+						<div
+							class="group relative bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-[#50C878] transition-all"
+						>
+							<div
+								class="flex flex-col md:flex-row justify-between mb-4"
+							>
+								<h3
+									class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
+								>
+									Automatización Omnicanal Latam
+								</h3>
+								<span
+									class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
+								>
+									Impacto Regional
+								</span>
+							</div>
+							<p class="text-gray-400 mb-6 leading-relaxed">
+								Diseño y despliegue de soluciones basadas en
+								LLMs para Panamá, República Dominicana, Ecuador
+								y Paraguay. Integré canales de <strong
+									>WhatsApp Business API</strong
+								> y optimicé flujos mediante el análisis detallado
+								de métricas de intención y entidades.
+							</p>
+							<div class="flex flex-wrap gap-3 mb-6">
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>WhatsApp API</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>NLU Setup</span
+								>
+								<span
+									class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
+									>Multi-country Deploy</span
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="mt-12 text-center">
+					<button
+						id="load-more-btn"
+						class="inline-flex items-center gap-2 px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-full border border-slate-700 transition-all cursor-pointer group"
+					>
+						<span id="btn-text">Ver todos los proyectos</span>
+						<svg
+							id="btn-icon"
+							xmlns="http://www.w3.org/2000/svg"
+							class="w-5 h-5 transition-transform duration-300 group-hover:translate-y-1"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M19 9l-7 7-7-7"></path>
+						</svg>
+					</button>
+				</div>
+			</section>
+			<section id="experiencia" class="py-20 border-t border-slate-800">
+				<div class="mb-12">
+					<h2 class="text-3xl font-bold text-white mb-2">
+						Impacto Regional en Latam
+					</h2>
+					<p
+						class="text-blue-400 font-mono text-sm uppercase tracking-widest"
+					>
+						Liderazgo de proyectos en 4 países
+					</p>
+				</div>
+
+				<div
+					class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+				>
+					<div
+						class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl hover:bg-blue-500/10 transition-colors group"
+					>
+						<div
+							class="text-4xl mb-4 group-hover:scale-110 transition-transform"
+						>
+							🇵🇦
+						</div>
+						<h3 class="text-xl font-bold text-white mb-2">
+							Panamá
+						</h3>
+						<p class="text-sm text-gray-400 mb-4">
+							Sector Banca & Seguros
+						</p>
+						<ul class="text-xs text-gray-500 space-y-2">
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Despliegue de Chatbots con Kore.ai
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Integración con Salesforce
+							</li>
+						</ul>
+					</div>
+
+					<div
+						class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl hover:bg-blue-500/10 transition-colors group"
+					>
+						<div
+							class="text-4xl mb-4 group-hover:scale-110 transition-transform"
+						>
+							🇩🇴
+						</div>
+						<h3 class="text-xl font-bold text-white mb-2">
+							Rep. Dominicana
+						</h3>
+						<p class="text-sm text-gray-400 mb-4">
+							Optimización CX
+						</p>
+						<ul class="text-xs text-gray-500 space-y-2">
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Flujos NLU contextuales
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								WhatsApp Business API
+							</li>
+						</ul>
+					</div>
+
+					<div
+						class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl hover:bg-blue-500/10 transition-colors group"
+					>
+						<div
+							class="text-4xl mb-4 group-hover:scale-110 transition-transform"
+						>
+							🇪🇨
+						</div>
+						<h3 class="text-xl font-bold text-white mb-2">
+							Ecuador
+						</h3>
+						<p class="text-sm text-gray-400 mb-4">Automatización</p>
+						<ul class="text-xs text-gray-500 space-y-2">
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Evaluación y Fine-tuning LLMs
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Reducción de tickets en 30%
+							</li>
+						</ul>
+					</div>
+
+					<div
+						class="bg-slate-800/40 border border-slate-700 p-6 rounded-2xl hover:bg-blue-500/10 transition-colors group"
+					>
+						<div
+							class="text-4xl mb-4 group-hover:scale-110 transition-transform"
+						>
+							🇵🇾
+						</div>
+						<h3 class="text-xl font-bold text-white mb-2">
+							Paraguay
+						</h3>
+						<p class="text-sm text-gray-400 mb-4">Estrategia AI</p>
+						<ul class="text-xs text-gray-500 space-y-2">
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Arquitectura RAG Corporativa
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Manejo de Datasets críticos
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			<section class="py-20">
+				<div class="grid md:grid-cols-2 gap-16">
+					<div>
+						<h3
+							class="text-xl font-bold text-white mb-6 flex items-center gap-2"
+						>
+							<span class="text-blue-500 font-mono">01.</span> IA &
+							Ingeniería
+						</h3>
+						<div class="flex flex-wrap gap-3">
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>LLMs (OpenAI, Gemini)</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>Python (Fine-tuning)</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>Arquitecturas RAG</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>Kore.ai Specialist</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>NLU/NLP Training</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>Evaluación RAG (RAGAS)</span
+							>
+						</div>
+					</div>
+
+					<div>
+						<h3
+							class="text-xl font-bold text-white mb-6 flex items-center gap-2"
+						>
+							<span class="text-purple-500 font-mono">02.</span> Estrategia
+							& Ecosistema
+						</h3>
+						<div class="flex flex-wrap gap-3">
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>Liderazgo de Equipos</span
+							>
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>Análisis de ROI / Métricas</span
+							>
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>Salesforce & Zendesk</span
+							>
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>WhatsApp Business</span
+							>
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>Estrategia de Datos Ética</span
+							>
+							<span
+								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
+								>Genesys</span
+							>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="mt-20 grid md:grid-cols-3 gap-6">
+				<div
+					class="p-6 border border-slate-800 rounded-xl hover:bg-slate-800/30"
+				>
+					<h4 class="font-bold mb-2">🤖 AI Strategy</h4>
+					<p class="text-sm text-gray-500">
+						Diseño de roadmaps para integración de GenAI en procesos
+						legacy.
+					</p>
+				</div>
+				<div
+					class="p-6 border border-slate-800 rounded-xl hover:bg-slate-800/30"
+				>
+					<h4 class="font-bold mb-2">📊 Data Governance</h4>
+					<p class="text-sm text-gray-500">
+						Gestión de calidad y ética de datos para entrenamiento
+						de modelos.
+					</p>
+				</div>
+				<div
+					class="p-6 border border-slate-800 rounded-xl hover:bg-slate-800/30"
+				>
+					<h4 class="font-bold mb-2">👥 Team Leadership</h4>
+					<p class="text-sm text-gray-500">
+						Coordinación de equipos multidisciplinarios (Devs, Data
+						Scientists, UX).
+					</p>
+				</div>
+			</section>
+			<section id="contacto" class="py-20 border-t border-slate-800">
+				<div class="max-w-2xl mx-auto">
+					<div class="text-center mb-12">
+						<h2 class="text-3xl font-bold text-white mb-4">
+							¿Tienes un proyecto en mente?
+						</h2>
+						<p class="text-gray-400">
+							Estoy disponible para consultorías de IA, liderazgo
+							de proyectos o roles de AI Management.
+						</p>
+					</div>
+
+					<form
+						action="https://formspree.io/f/xdaewknd"
+						method="POST"
+						class="space-y-6"
+					>
+						<div class="grid md:grid-cols-2 gap-6">
+							<div>
+								<label
+									class="block text-sm font-medium text-gray-400 mb-2"
+									>Nombre</label
+								>
+								<input
+									type="text"
+									name="name"
+									required
+									class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+									placeholder="Pepito Pérez"
+								/>
+							</div>
+							<div>
+								<label
+									class="block text-sm font-medium text-gray-400 mb-2"
+									>Email</label
+								>
+								<input
+									type="email"
+									name="email"
+									required
+									class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+									placeholder="tu@email.com"
+								/>
+							</div>
+						</div>
+						<div>
+							<label
+								class="block text-sm font-medium text-gray-400 mb-2"
+								>Mensaje</label
+							>
+							<textarea
+								name="message"
+								rows="4"
+								required
+								class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 transition"
+								placeholder="Cuéntame sobre tu proyecto o propuesta laboral..."
+							></textarea>
+						</div>
+						<button
+							type="submit"
+							class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-blue-500/20"
+						>
+							Enviar Mensaje
+						</button>
+					</form>
+				</div>
+			</section>
+			<footer class="py-12 border-t border-slate-800 text-center">
+				<div class="flex justify-center gap-8 mb-8">
+					<a
+						href="https://www.linkedin.com/in/fabianjosemendez"
+						target="_blank"
+						class="text-gray-400 hover:text-blue-400 transition-colors"
+					>
+						<span class="text-sm font-mono tracking-tighter"
+							>LINKEDIN</span
+						>
+					</a>
+					<a
+						href="https://wa.me/584127344016"
+						target="_blank"
+						class="text-gray-400 hover:text-green-400 transition-colors"
+					>
+						<span class="text-sm font-mono tracking-tighter"
+							>WHATSAPP</span
+						>
+					</a>
+					<a
+						href="mailto:fjmendez20@gmail.com"
+						class="text-gray-400 hover:text-green-400 transition-colors"
+					>
+						EMAIL
+					</a>
+				</div>
+				<p class="text-gray-500 text-xs tracking-wide uppercase">
+					© {new Date().getFullYear()} — {nombre}. Todos los derechos
+					reservados.
+				</p>
+			</footer>
+		</main>
+	</body>
+</html>
+<script>
+	const btn = document.getElementById("load-more-btn");
+	const extra = document.getElementById("extra-projects");
+	const btnText = document.getElementById("btn-text");
+	const btnIcon = document.getElementById("btn-icon");
+
+	btn?.addEventListener("click", () => {
+		const isHidden = extra?.classList.contains("hidden");
+		if (isHidden) {
+			extra?.classList.remove("hidden");
+			// Timeout para permitir que el DOM detecte el cambio antes de animar
+			setTimeout(() => {
+				extra?.classList.remove("opacity-0", "translate-y-4");
+			}, 10);
+			btnText!.textContent = "Ver menos";
+			btnIcon!.style.transform = "rotate(180deg)";
+		} else {
+			extra?.classList.add("opacity-0", "translate-y-4");
+			setTimeout(() => {
+				extra?.classList.add("hidden");
+			}, 500);
+			btnText!.textContent = "Ver todos los proyectos";
+			btnIcon!.style.transform = "rotate(0deg)";
+			// Scroll suave hacia arriba de la sección al cerrar
+			document
+				.getElementById("proyectos")
+				?.scrollIntoView({ behavior: "smooth" });
+		}
+	});
+</script>
