@@ -368,9 +368,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						<h3 class="text-xl font-bold text-white mb-2">
 							Panamá
 						</h3>
-						<p class="text-sm text-gray-400 mb-4">
-							Sector Banca & Seguros
-						</p>
+						<p class="text-sm text-gray-400 mb-4">Sector Banca</p>
 						<ul class="text-xs text-gray-500 space-y-2">
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
@@ -380,7 +378,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
 								></span>
-								Integración con Salesforce
+								Integración con Zendesk
 							</li>
 						</ul>
 					</div>
@@ -396,14 +394,17 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						<h3 class="text-xl font-bold text-white mb-2">
 							Rep. Dominicana
 						</h3>
-						<p class="text-sm text-gray-400 mb-4">
-							Optimización CX
-						</p>
+						<p class="text-sm text-gray-400 mb-4">Sector Banca</p>
 						<ul class="text-xs text-gray-500 space-y-2">
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
 								></span>
-								Flujos NLU contextuales
+								Despliegue de Chatbots con Kore.ai
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Asistente de Voz con Kore.ai
 							</li>
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
@@ -424,12 +425,17 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						<h3 class="text-xl font-bold text-white mb-2">
 							Ecuador
 						</h3>
-						<p class="text-sm text-gray-400 mb-4">Automatización</p>
+						<p class="text-sm text-gray-400 mb-4">Sector Seguros</p>
 						<ul class="text-xs text-gray-500 space-y-2">
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
 								></span>
-								Evaluación y Fine-tuning LLMs
+								Despliegue de Chatbots con Kore.ai
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Fine-tuning LLMs
 							</li>
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
@@ -460,7 +466,12 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 							<li class="flex items-center gap-2">
 								<span class="w-1 h-1 bg-blue-500 rounded-full"
 								></span>
-								Manejo de Datasets críticos
+								Fine-tuning LLMs
+							</li>
+							<li class="flex items-center gap-2">
+								<span class="w-1 h-1 bg-blue-500 rounded-full"
+								></span>
+								Evaluación RAG
 							</li>
 						</ul>
 					</div>
@@ -662,7 +673,18 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						href="mailto:fjmendez20@gmail.com"
 						class="text-gray-400 hover:text-green-400 transition-colors"
 					>
-						EMAIL
+						<span class="text-sm font-mono tracking-tighter"
+							>EMAIL</span
+						>
+					</a>
+					<a
+						href="/CV_Fabian_Mendez.pdf"
+						target="_blank"
+						class="text-gray-400 hover:text-green-400 transition-colors"
+					>
+						<span class="text-sm font-mono tracking-tighter"
+							>CV</span
+						>
 					</a>
 				</div>
 				<p class="text-gray-500 text-xs tracking-wide uppercase">
@@ -672,34 +694,34 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 			</footer>
 		</main>
 	</body>
-</html>
-<script>
-	const btn = document.getElementById("load-more-btn");
-	const extra = document.getElementById("extra-projects");
-	const btnText = document.getElementById("btn-text");
-	const btnIcon = document.getElementById("btn-icon");
+	<script>
+		const btn = document.getElementById("load-more-btn");
+		const extra = document.getElementById("extra-projects");
+		const btnText = document.getElementById("btn-text");
+		const btnIcon = document.getElementById("btn-icon");
 
-	btn?.addEventListener("click", () => {
-		const isHidden = extra?.classList.contains("hidden");
-		if (isHidden) {
-			extra?.classList.remove("hidden");
-			// Timeout para permitir que el DOM detecte el cambio antes de animar
-			setTimeout(() => {
-				extra?.classList.remove("opacity-0", "translate-y-4");
-			}, 10);
-			btnText!.textContent = "Ver menos";
-			btnIcon!.style.transform = "rotate(180deg)";
-		} else {
-			extra?.classList.add("opacity-0", "translate-y-4");
-			setTimeout(() => {
-				extra?.classList.add("hidden");
-			}, 500);
-			btnText!.textContent = "Ver todos los proyectos";
-			btnIcon!.style.transform = "rotate(0deg)";
-			// Scroll suave hacia arriba de la sección al cerrar
-			document
-				.getElementById("proyectos")
-				?.scrollIntoView({ behavior: "smooth" });
-		}
-	});
-</script>
+		btn?.addEventListener("click", () => {
+			const isHidden = extra?.classList.contains("hidden");
+			if (isHidden) {
+				extra?.classList.remove("hidden");
+				// Timeout para permitir que el DOM detecte el cambio antes de animar
+				setTimeout(() => {
+					extra?.classList.remove("opacity-0", "translate-y-4");
+				}, 10);
+				btnText!.textContent = "Ver menos";
+				btnIcon!.style.transform = "rotate(180deg)";
+			} else {
+				extra?.classList.add("opacity-0", "translate-y-4");
+				setTimeout(() => {
+					extra?.classList.add("hidden");
+				}, 500);
+				btnText!.textContent = "Ver todos los proyectos";
+				btnIcon!.style.transform = "rotate(0deg)";
+				// Scroll suave hacia arriba de la sección al cerrar
+				document
+					.getElementById("proyectos")
+					?.scrollIntoView({ behavior: "smooth" });
+			}
+		});
+	</script>
+</html>
