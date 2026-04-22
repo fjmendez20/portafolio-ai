@@ -4,7 +4,7 @@
 import "../styles/global.css";
 
 const nombre = "Fabian Mendez";
-const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
+const titulo = "Lead AI Developer & Solutions Architect";
 ---
 
 <html lang="es">
@@ -12,9 +12,10 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<title>{nombre} - Portafolio</title>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 	</head>
-	<body class="bg-[#021336] text-white font-sans">
-		<main class="max-w-5xl mx-auto p-8">
+		<body class="bg-[#021336] text-white font-sans">
+			<main class="max-w-5xl mx-auto p-8" data-props={JSON.stringify({ nombre, titulo })}>
 			<section
 				class="min-h-[90vh] md:min-h-[80vh] flex items-center justify-center py-10 md:py-16"
 			>
@@ -63,11 +64,8 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						>
 							{titulo}
 						</p>
-						<p
-							class="text-gray-300 text-base md:text-lg leading-relaxed mb-6 px-2 md:px-0"
-						>
-							Especialista en <strong>IA Conversacional</strong> transformando
-							la experiencia del cliente con LLMs y arquitecturas RAG.
+						<p class="text-gray-300 text-base md:text-lg leading-relaxed mb-6 px-2 md:px-0">
+							<strong>Software Engineer | IA Conversacional Specialist. </strong> Desarrollo agentes autónomos y flujos NLU complejos para la resolución de problemas de negocio a escala.
 						</p>
 
 						<div
@@ -94,45 +92,21 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 					Tech Stack
 				</h2>
 				<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						Python
+					<div class="bg-slate-800/50 border border-slate-700 p-4 rounded-xl text-center hover:border-[#50C878] transition-all">
+						<p class="text-[#50C878] text-xs font-mono mb-1">Backend</p>
+						<span class="font-bold">Python & Node.js</span>
 					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						Kore.ai
+					<div class="bg-slate-800/50 border border-slate-700 p-4 rounded-xl text-center hover:border-[#50C878] transition-all">
+						<p class="text-[#50C878] text-xs font-mono mb-1">AI Frameworks</p>
+						<span class="font-bold">LangGraph & RAGAS</span>
 					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						LLMs & RAG
+					<div class="bg-slate-800/50 border border-slate-700 p-4 rounded-xl text-center hover:border-[#50C878] transition-all">
+						<p class="text-[#50C878] text-xs font-mono mb-1">Conversational</p>
+						<span class="font-bold">Kore.ai SDK & NLU</span>
 					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						Chatbot Design
-					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						JavaScript
-					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						LangGraph
-					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						Legacy Fundamentals
-					</div>
-					<div
-						class="bg-slate-800 p-4 rounded-lg text-center hover:bg-slate-700"
-					>
-						Web Fundamentals
+					<div class="bg-slate-800/50 border border-slate-700 p-4 rounded-xl text-center hover:border-[#50C878] transition-all">
+						<p class="text-[#50C878] text-xs font-mono mb-1">Infrastructure</p>
+						<span class="font-bold">SIP, VoIP & APIs</span>
 					</div>
 				</div>
 			</section>
@@ -150,11 +124,9 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						<div
 							class="flex flex-col md:flex-row justify-between mb-4"
 						>
-							<h3
-								class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
-							>
-								Arquitectura RAG & Evaluación con RAGAS
-							</h3>
+						<h3 class="text-2xl font-bold text-white group-hover:text-[#50C878] transition">
+							Ingeniería de Pipelines RAG & Evaluación Automatizada
+						</h3>
 							<span
 								class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
 							>
@@ -162,14 +134,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 							</span>
 						</div>
 						<p class="text-gray-400 mb-6 leading-relaxed">
-							Lideré el diseño de arquitecturas escalables basadas
-							en <strong>RAG</strong>. Implementé un framework de
-							evaluación avanzada utilizando <strong>RAGAS</strong
-							>, midiendo métricas críticas como <em
-								>Faithfulness</em
-							>, <em>Answer Relevance</em> y <em
-								>Context Precision</em
-							> para optimizar el rendimiento de LLMs en el sector banca.
+							Diseñé y programé arquitecturas de recuperación de información utilizando <strong>Vector Databases</strong>. Desarrollé un framework de evaluación técnica con <strong>RAGAS</strong> para auditar la precisión algorítmica y optimizar la respuesta de los modelos en producción.
 						</p>
 						<div class="flex flex-wrap gap-3 mb-6">
 							<span
@@ -179,10 +144,6 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 							<span
 								class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
 								>RAGAS Framework</span
-							>
-							<span
-								class="bg-slate-700 px-3 py-1 rounded-md text-sm text-gray-300"
-								>Vector Databases</span
 							>
 						</div>
 					</div>
@@ -200,7 +161,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 								<h3
 									class="text-2xl font-bold text-white group-hover:text-[#50C878] transition"
 								>
-									Implementación de Voicebots & Telefonía IP
+									Desarrollo de Integraciones Voice-over-IP (SIP)
 								</h3>
 								<span
 									class="text-sm font-mono text-[#50C878] bg-[#50C878]/10 px-3 py-1 rounded-full h-fit"
@@ -318,7 +279,6 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 						</div>
 					</div>
 				</div>
-
 				<div class="mt-12 text-center">
 					<button
 						id="load-more-btn"
@@ -480,11 +440,8 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 			<section class="py-20">
 				<div class="grid md:grid-cols-2 gap-16">
 					<div>
-						<h3
-							class="text-xl font-bold text-white mb-6 flex items-center gap-2"
-						>
-							<span class="text-blue-500 font-mono">01.</span> IA &
-							Ingeniería
+						<h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+							<span class="text-[#50C878] font-mono">01.</span> Full-Stack AI Engineering
 						</h3>
 						<div class="flex flex-wrap gap-3">
 							<span
@@ -510,6 +467,10 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 							<span
 								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
 								>Evaluación RAG (RAGAS)</span
+							>
+							<span
+								class="bg-blue-500/10 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-lg text-sm"
+								>Automatizaciones n8n (Workflows)</span
 							>
 						</div>
 					</div>
@@ -546,6 +507,7 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 								class="bg-purple-500/10 border border-purple-500/30 text-purple-300 px-4 py-2 rounded-lg text-sm"
 								>Genesys</span
 							>
+							
 						</div>
 					</div>
 				</div>
@@ -692,8 +654,360 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 					reservados.
 				</p>
 			</footer>
-		</main>
-	</body>
+		</main> 
+		<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+		
+			<div 
+				id="chat-tooltip"
+				class="bg-white text-[#021336] px-4 py-2 rounded-xl text-sm font-bold shadow-xl animate-bounce-slow relative mr-2 mb-1"
+			>
+				¡Hola! Estoy acá para ayudarte 👋
+				<div class="absolute -bottom-1 right-6 w-3 h-3 bg-white rotate-45"></div>
+			</div>
+	
+			<button
+				id="chat-toggle-btn"
+				class="w-16 h-16 bg-[#50C878] hover:bg-[#40a160] rounded-full flex items-center justify-center cursor-pointer shadow-lg shadow-[#50C878]/30 transition-all duration-700 hover:scale-110 group"
+				aria-label="Abrir chat con asistente IA"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white group-[.chat-open]:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+				</svg>
+				<svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white hidden group-[.chat-open]:block rotate-90 group-[.chat-open]:rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+				</svg>
+			</button>
+		</div>
+
+	<div
+		id="chat-window"
+		class="fixed bottom-20 right-4 sm:bottom-24 sm:right-8
+			   w-[calc(100vw-2rem)] sm:w-[420px]
+			   h-[83vh] sm:h-[720px] max-h-[92vh]
+			   bg-[#0a192f] border border-slate-700 rounded-2xl shadow-2xl shadow-[#50C878]/10
+			   flex flex-col
+			   scale-90 opacity-0 pointer-events-none invisible
+			   transition-all duration-300 origin-bottom-right z-50 overflow-hidden"
+	>
+		<div class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700 p-4 flex justify-between items-center shrink-0">
+			<div class="flex items-center gap-3">
+				<div class="relative">
+					<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#50C878] to-purple-600 p-[2px]">
+						<div class="w-full h-full bg-[#0a192f] rounded-full overflow-hidden border border-white/10">
+							<img src="/avatar.png" alt="AI Assistant" class="w-full h-full object-cover" />
+						</div>
+					</div>
+				</div>
+				<div>
+					<h3 class="font-bold text-white text-base leading-tight">AI assistant</h3>
+					<p id="chat-status-text" class="text-[11px] text-yellow-500 font-mono flex items-center gap-1.5 mt-0.5">
+						<span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+						Iniciando AI assistant...
+					</p>
+				</div>
+			</div>
+			<button id="chat-close-btn" type="button" class="text-gray-400 hover:text-white transition-colors">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+				</svg>
+			</button>
+		</div>
+
+		<div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin bg-gradient-to-b from-[#0a192f] to-[#021336]">
+			<div id="initial-message-container"></div>
+		</div>
+
+		<div class="p-3 bg-slate-800/50 border-t border-slate-700 shrink-0">
+			<form id="chat-form" class="flex gap-2 relative items-center">
+				<input type="text" id="chat-input" placeholder="Pregúntame sobre sus proyectos..." class="flex-1 bg-[#021336] border border-slate-600 rounded-xl pl-4 pr-12 py-3.5 text-sm text-white focus:outline-none focus:border-[#50C878] transition-all placeholder-gray-500" autocomplete="off" />
+				<button type="submit" id="send-btn" class="absolute right-1.5 p-2.5 bg-[#50C878] text-[#021336] rounded-lg hover:bg-[#3db868] transition-colors disabled:opacity-50 flex items-center justify-center">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" viewBox="0 0 20 20" fill="currentColor">
+						<path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+					</svg>
+				</button>
+			</form>
+			<div class="text-center mt-2">
+				<span class="text-[10px] text-gray-400 font-mono">Respuestas generadas por IA.</span>
+			</div>
+		</div>
+	</div> </body> </html>
+	<script>
+		/**
+		 * @typedef {{ nombre?: string, titulo?: string }} PageProps
+		 */
+		/** @type {PageProps} */
+		window.PAGE_PROPS = window.PAGE_PROPS ?? {};
+		// Exponer props del frontmatter al cliente: window.PAGE_PROPS
+		try {
+			const _p = document.querySelector('main')?.dataset.props || '{}';
+			window.PAGE_PROPS = JSON.parse(_p);
+		} catch (e) {
+			window.PAGE_PROPS = window.PAGE_PROPS || {};
+		}
+		// Actualizar saludo del asistente con el nombre real desde PAGE_PROPS
+		try {
+			const g = document.getElementById('assistant-greeting');
+			if (g) {
+				const n = window.PAGE_PROPS?.nombre || 'Fabian';
+				g.textContent = `¡Hola! Soy el asistente virtual de ${n}. ¿En qué puedo ayudarte hoy?`;
+			}
+		} catch (e) {
+			/* no-op */
+		}
+		/** @type {HTMLElement | null} */
+		const toggleBtn = document.getElementById("chat-toggle-btn");
+		/** @type {HTMLElement | null} */
+		const closeBtn = document.getElementById("chat-close-btn");
+		/** @type {HTMLElement | null} */
+		const chatWindow = document.getElementById("chat-window");
+		/** @type {HTMLFormElement | null} */
+		const chatForm = document.getElementById("chat-form");
+		/** @type {HTMLInputElement | null} */
+		const chatInput = document.getElementById("chat-input");
+		/** @type {HTMLElement | null} */
+		const chatMessages = document.getElementById("chat-messages");
+		/** @type {HTMLButtonElement | null} */
+		const sendBtn = document.getElementById("send-btn");
+
+		let isChatOpen = false;
+		// 0. GESTIÓN DE SESIÓN PROFESIONAL (localStorage)
+		let sessionId = localStorage.getItem('chat_session_id');
+		if (!sessionId) {
+			// Si es un usuario nuevo, le creamos un ID único seguro
+			// Usamos crypto.randomUUID() que es el estándar moderno de navegadores
+			sessionId = 'User-' + crypto.randomUUID();
+			localStorage.setItem('chat_session_id', sessionId);
+		}
+
+		// 2. LA FUNCIÓN DEL BOTÓN (Ya no hace el ping, solo abre la ventana)
+		function toggleChat() {
+		isChatOpen = !isChatOpen;
+		const tooltip = document.getElementById("chat-tooltip");
+		if (isChatOpen) {
+			chatWindow?.classList.remove("scale-90", "opacity-0", "pointer-events-none", "invisible");
+			chatWindow?.classList.add("scale-100", "opacity-100");
+			toggleBtn?.classList.add("chat-open");
+			tooltip?.classList.add("hidden");
+			setTimeout(() => chatInput?.focus(), 300);
+		} else {
+			chatWindow?.classList.remove("scale-100", "opacity-100");
+			chatWindow?.classList.add("scale-90", "opacity-0", "pointer-events-none", "invisible");
+			toggleBtn?.classList.remove("chat-open");
+			tooltip?.classList.remove("hidden");
+		}
+		}
+
+		toggleBtn?.addEventListener("click", toggleChat);
+		closeBtn?.addEventListener("click", toggleChat);
+
+		// Función para añadir mensajes al UI
+		/**
+		 * Añade un mensaje al UI
+		 * @param {string} text
+		 * @param {'user'|'bot'} sender
+		 */
+// 1. Saludo inicial estilo Fabian AI
+try {
+            const initContainer = document.getElementById('initial-message-container');
+            if (initContainer) {
+                const now = new Date();
+                const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+                
+                initContainer.innerHTML = `
+                    <div class="mb-4">
+
+                    </div>
+                `;
+            }
+        } catch (e) {}
+
+		function addMessage(text, sender) {
+            const isUser = sender === "user";
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+
+            // Convertir el texto Markdown a HTML (solo si es el bot, o ambos, como prefieras)
+            // Usamos breaks: true para que los saltos de línea normales se conviertan en <br>
+            marked.setOptions({ breaks: true });
+            const parsedText = isUser ? text : marked.parse(text);
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300";
+
+            wrapper.innerHTML = `
+                <div class="text-[10px] text-white-500 font-bold mb-1 ${isUser ? "text-right pr-2" : "pl-11"} uppercase tracking-wider">
+                    ${isUser ? "Tú" : "Asistente AI"} <span class="font-normal opacity-95">${time}</span>
+                </div>
+                <div class="flex items-start gap-3 ${isUser ? "justify-end" : ""}">
+                    ${!isUser ? `<img src="/avatar.png" class="w-8 h-8 rounded-full border border-slate-700 shrink-0 object-cover" />` : ""}
+                    <div class="${isUser ? "bg-[#50C878] text-[#021336] font-medium" : "bg-slate-800 text-gray-200 border border-slate-700 markdown-chat"} p-3.5 rounded-2xl ${isUser ? "rounded-tr-none" : "rounded-tl-none"} text-sm shadow-lg max-w-[85%] break-words">
+                        ${parsedText}
+                    </div>
+                </div>
+            `;
+
+            if (chatMessages) {
+                chatMessages.appendChild(wrapper);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+		// Bandera de control para evitar spam de clics
+		let isProcessing = false;
+
+		// Manejo del envío del formulario
+		chatForm?.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			
+			// Si ya está procesando una petición, bloqueamos las siguientes
+			if (isProcessing) return;
+
+			const message = (chatInput?.value || "").trim();
+			if (!message) return;
+
+			// Bloqueamos el estado y la UI
+			isProcessing = true;
+			if (sendBtn) sendBtn.disabled = true;
+
+			// 1. Mostrar mensaje del usuario
+			addMessage(message, "user");
+			if (chatInput) chatInput.value = "";
+
+			// 2. Mostrar indicador de "Escribiendo..." temporal
+			const loadingDiv = document.createElement("div");
+            loadingDiv.id = "loading-indicator";
+            loadingDiv.className = "mb-6";
+            loadingDiv.innerHTML = `
+                <div class="text-[10px] text-gray-500 font-bold mb-1 pl-11">ASISTENTE AI</div>
+                <div class="flex items-start gap-3">
+                    <img src="/avatar.png" class="w-8 h-8 rounded-full border border-slate-700 shrink-0 object-cover" />
+                    <div class="bg-slate-800 p-4 rounded-2xl rounded-tl-none border border-slate-700 flex gap-1">
+                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce"></span>
+                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                    </div>
+                </div>
+            `;
+			if (chatMessages) {
+				chatMessages.appendChild(loadingDiv);
+				chatMessages.scrollTop = chatMessages.scrollHeight;
+			}
+
+			// 3. ÚNICA llamada a la API
+			try {
+				const response = await fetch('/api/chat', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ 
+						message: message,
+						session_id: sessionId
+					 })
+				});
+				
+				const data = await response.json();
+				
+				// Eliminar indicador de carga y mostrar respuesta real
+				document.getElementById('loading-indicator')?.remove();
+				addMessage(data.reply, 'bot');
+
+				// Actualizar estado a Online en la UI
+				const statusText = document.getElementById('chat-status-text');
+				if (statusText) {
+					statusText.className = "text-xs text-[#50C878] font-mono flex items-center gap-1";
+					statusText.innerHTML = '<span class="w-2 h-2 bg-[#50C878] rounded-full"></span>Online';
+				}
+
+			} catch (error) {
+				document.getElementById('loading-indicator')?.remove();
+				addMessage("Lo siento, tuve un problema técnico de conexión. ¿Podrías intentar de nuevo?", 'bot');
+				console.error("Error en el chat:", error);
+			} finally {
+				// Liberamos el bloqueo al terminar (sea éxito o error)
+				isProcessing = false;
+				if (sendBtn) sendBtn.disabled = false;
+				chatInput?.focus();
+			}
+		});
+	</script>
+
+	<style>
+		.scrollbar-thin::-webkit-scrollbar {
+			width: 6px;
+		}
+		.scrollbar-thin::-webkit-scrollbar-track {
+			background: transparent;
+		}
+		.scrollbar-thin::-webkit-scrollbar-thumb {
+			background-color: rgba(75, 85, 99, 0.5); /* gray-600 con opacidad */
+			border-radius: 20px;
+		}
+		/* ESTILOS PARA EL MARKDOWN DEL CHAT */
+        .markdown-chat p {
+            margin-bottom: 0.75rem;
+        }
+        .markdown-chat p:last-child {
+            margin-bottom: 0;
+        }
+        .markdown-chat strong {
+            font-weight: 700;
+            color: white; /* Resalta las negritas en blanco puro sobre el fondo slate */
+        }
+        .markdown-chat em {
+            font-style: italic;
+        }
+        .markdown-chat ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .markdown-chat ol {
+            list-style-type: decimal;
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .markdown-chat li {
+            margin-bottom: 0.25rem;
+        }
+        .markdown-chat a {
+            color: #50C878;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        .markdown-chat a:hover {
+            color: #3db868;
+        }
+        .markdown-chat pre {
+            background-color: #021336;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid #1e293b;
+        }
+        .markdown-chat code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.85em;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 0.15rem 0.3rem;
+            border-radius: 0.25rem;
+            color: #50C878;
+        }
+        /* Evita que el código dentro de un bloque pre tenga fondo extra */
+        .markdown-chat pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+		/* Animación de flotado suave para la burbuja */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+	</style>
 	<script>
 		const btn = document.getElementById("load-more-btn");
 		const extra = document.getElementById("extra-projects");
@@ -708,15 +1022,15 @@ const titulo = "Especialista Arquitecto de Soluciones | AI & Chatbots";
 				setTimeout(() => {
 					extra?.classList.remove("opacity-0", "translate-y-4");
 				}, 10);
-				btnText!.textContent = "Ver menos";
-				btnIcon!.style.transform = "rotate(180deg)";
+				if (btnText) btnText.textContent = "Ver menos";
+				if (btnIcon) btnIcon.style.transform = "rotate(180deg)";
 			} else {
 				extra?.classList.add("opacity-0", "translate-y-4");
 				setTimeout(() => {
 					extra?.classList.add("hidden");
 				}, 500);
-				btnText!.textContent = "Ver todos los proyectos";
-				btnIcon!.style.transform = "rotate(0deg)";
+				if (btnText) btnText.textContent = "Ver todos los proyectos";
+				if (btnIcon) btnIcon.style.transform = "rotate(0deg)";
 				// Scroll suave hacia arriba de la sección al cerrar
 				document
 					.getElementById("proyectos")
