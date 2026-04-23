@@ -732,7 +732,60 @@ const titulo = "Lead AI Developer & Solutions Architect";
 				<span class="text-[10px] text-gray-400 font-mono">Respuestas generadas por IA.</span>
 			</div>
 		</div>
-	</div> </body> </html>
+	</div> 
+	<script>
+		// 1. Seleccionamos el formulario de contacto usando su atributo action
+		const contactForm = document.querySelector('form[action^="https://formspree.io"]');
+		
+		contactForm?.addEventListener('submit', async (e) => {
+			e.preventDefault(); // Evita la redirección a la página de "Gracias"
+			
+			const form = e.target;
+			const formData = new FormData(form);
+			const submitBtn = form.querySelector('button[type="submit"]');
+			const originalBtnText = submitBtn.innerHTML;
+	
+			// 2. Feedback visual: Deshabilitar botón y mostrar estado de carga
+			if (submitBtn) {
+				submitBtn.disabled = true;
+				submitBtn.innerHTML = "Enviando...";
+			}
+	
+			try {
+				// 3. Enviamos los datos mediante fetch (AJAX)
+				const response = await fetch(form.action, {
+					method: 'POST',
+					body: formData,
+					headers: {
+						'Accept': 'application/json'
+					}
+				});
+	
+				if (response.ok) {
+					// ÉXITO: Limpiamos el formulario y avisamos al usuario
+					form.reset();
+					alert("¡Mensaje enviado con éxito! Me pondré en contacto pronto.");
+				} else {
+					// Manejo de errores del servidor (ej. Formspree rechazó el envío)
+					const data = await response.json();
+					alert(data.errors ? data.errors.map(error => error.message).join(", ") : "Error al enviar.");
+				}
+			} catch (error) {
+				// Manejo de errores de red
+				alert("Hubo un error de conexión. Por favor, inténtalo de nuevo.");
+			} finally {
+				// 4. Restauramos el botón a su estado original
+				if (submitBtn) {
+					submitBtn.disabled = false;
+					submitBtn.innerHTML = originalBtnText;
+				}
+			}
+		});
+	</script>
+</body> 
+	
+
+</html>
 	<script>
 		/**
 		 * @typedef {{ nombre?: string, titulo?: string }} PageProps
