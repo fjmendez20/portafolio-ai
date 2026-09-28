@@ -668,7 +668,7 @@ const titulo = "AI Developer & Solutions Architect";
 				</p>
 			</footer>
 		</main> 
-		<div class="hidden fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+		<div class=" fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
 		
 			<div 
 				id="chat-tooltip"
@@ -696,7 +696,7 @@ const titulo = "AI Developer & Solutions Architect";
 		id="chat-window"
 		class="fixed bottom-20 right-4 sm:bottom-24 sm:right-8
 			   w-[calc(100vw-2rem)] sm:w-[420px]
-			   h-[83vh] sm:h-[720px] max-h-[92vh]
+			   h-[min(83vh,calc(100dvh-6rem))] sm:h-[min(720px,calc(100dvh-8rem))] max-h-[92vh]
 			   bg-[#0a192f] border border-slate-700 rounded-2xl shadow-2xl shadow-[#50C878]/10
 			   flex flex-col
 			   scale-90 opacity-0 pointer-events-none invisible
