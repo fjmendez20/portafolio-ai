@@ -845,7 +845,44 @@ const titulo = "AI Developer & Solutions Architect";
 			localStorage.setItem('chat_session_id', sessionId);
 		}
 
-		// 2. LA FUNCIÓN DEL BOTÓN (Ya no hace el ping, solo abre la ventana)
+		// 2. LA FUNCIÓN DEL BOTÓN
+		/** @param {'online'|'waking'|'offline'} state */
+		function setChatStatus(state) {
+			const statusText = document.getElementById('chat-status-text');
+			if (!statusText) return;
+			const map = {
+				online: ['text-[#50C878]', 'bg-[#50C878]', 'Online'],
+				waking: ['text-yellow-500', 'bg-yellow-500', 'Conectando...'],
+				offline: ['text-red-400', 'bg-red-400', 'Sin conexión'],
+			};
+			const [textClass, dotClass, label] = map[state];
+			statusText.className = `text-[11px] ${textClass} font-mono flex items-center gap-1.5 mt-0.5`;
+			statusText.innerHTML = `<span class="w-2 h-2 ${dotClass} rounded-full animate-pulse"></span>${label}`;
+		}
+
+		/**
+		 * Despierta el agente de Render free. El cold start puede tardar 30-50s,
+		 * así que se dispara al abrir el widget y el usuario escribe mientras.
+		 * @param {boolean} force
+		 */
+		let wakeInFlight = false;
+		async function wakeAgent(force = false) {
+			if (wakeInFlight && !force) return;
+			wakeInFlight = true;
+			setChatStatus('waking');
+			try {
+				const res = await fetch('/api/wake');
+				const data = await res.json();
+				setChatStatus(data.status === 'awake' ? 'online' : 'online');
+				console.log('🟢 Wake:', JSON.stringify(data));
+			} catch (e) {
+				// No es crítico: si Render está despierto igual responderá.
+				console.warn('🟡 Wake sin respuesta:', e);
+			} finally {
+				wakeInFlight = false;
+			}
+		}
+
 		function toggleChat() {
 		isChatOpen = !isChatOpen;
 		const tooltip = document.getElementById("chat-tooltip");
@@ -855,6 +892,7 @@ const titulo = "AI Developer & Solutions Architect";
 			toggleBtn?.classList.add("chat-open");
 			tooltip?.classList.add("hidden");
 			setTimeout(() => chatInput?.focus(), 300);
+			wakeAgent();
 		} else {
 			chatWindow?.classList.remove("scale-100", "opacity-100");
 			chatWindow?.classList.add("scale-90", "opacity-0", "pointer-events-none", "invisible");
@@ -918,6 +956,54 @@ try {
             }
         }
 
+		// --- Streaming: burbuja que se rellena token a token ---
+		/** Crea la burbuja del asistente y devuelve el nodo donde va el texto. */
+		function createStreamingBubble() {
+			const now = new Date();
+			const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
+
+			const wrapper = document.createElement("div");
+			wrapper.className = "mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300";
+			wrapper.innerHTML = `
+				<div class="text-[10px] text-white-500 font-bold mb-1 pl-11 uppercase tracking-wider">
+					Asistente AI <span class="font-normal opacity-95">${time}</span>
+				</div>
+				<div class="flex items-start gap-3">
+					<img src="/avatar.png" class="w-8 h-8 rounded-full border border-slate-700 shrink-0 object-cover" />
+					<div class="bg-slate-800 text-gray-200 border border-slate-700 markdown-chat p-3.5 rounded-2xl rounded-tl-none text-sm shadow-lg max-w-[85%] break-words">
+						<span class="inline-block w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce"></span>
+					</div>
+				</div>
+			`;
+
+			if (chatMessages) {
+				chatMessages.appendChild(wrapper);
+				chatMessages.scrollTop = chatMessages.scrollHeight;
+			}
+			return wrapper.querySelector('.markdown-chat');
+		}
+
+		/** Escribe el texto en la burbuja y la mantiene siempre al final. */
+		function paintBubble(bubble, text) {
+			if (!bubble) return;
+			marked.setOptions({ breaks: true });
+			bubble.innerHTML = marked.parse(text);
+			if (chatMessages) chatMessages.scrollTop = chatMessages.scrollHeight;
+		}
+
+		/**
+		 * Repintar en cada token satura el main thread y produce parpadeo.
+		 * Agrupamos los repintados en ventanas de 60 ms.
+		 */
+		function paintThrottled(bubble, text) {
+			bubble.dataset.raw = text;
+			if (bubble._paintTimer) return;
+			bubble._paintTimer = window.setTimeout(() => {
+				bubble._paintTimer = null;
+				paintBubble(bubble, bubble.dataset.raw || '');
+			}, 60);
+		}
+
 		// Bandera de control para evitar spam de clics
 		let isProcessing = false;
 
@@ -959,33 +1045,114 @@ try {
 				chatMessages.scrollTop = chatMessages.scrollHeight;
 			}
 
-			// 3. ÚNICA llamada a la API
+			// 3. ÚNICA llamada a la API, ahora en streaming
+			/** @type {HTMLElement | null} */
+			let bubble = null;
+			let streamedText = '';
+			let finalText = '';
+			let streamError = '';
+
+			/**
+			 * Procesa un frame SSE (`event: x\ndata: {...}`).
+			 * @param {string} frame
+			 */
+			const handleFrame = (frame) => {
+				let name = 'message';
+				const dataLines = [];
+				for (const line of frame.split('\n')) {
+					if (line.startsWith('event:')) name = line.slice(6).trim();
+					else if (line.startsWith('data:')) dataLines.push(line.slice(5).trim());
+				}
+				if (!dataLines.length) return;
+
+				let payload;
+				try {
+					payload = JSON.parse(dataLines.join('\n'));
+				} catch (e) {
+					return;
+				}
+
+				if (name === 'delta' && payload.text) {
+					if (!bubble) {
+						document.getElementById('loading-indicator')?.remove();
+						bubble = createStreamingBubble();
+					}
+					streamedText += payload.text;
+					paintThrottled(bubble, streamedText);
+				} else if (name === 'done') {
+					finalText = payload.response || streamedText;
+				} else if (name === 'error') {
+					streamError = payload.message || 'Algo salió mal. ¿Intentamos de nuevo?';
+				}
+			};
+
 			try {
 				const response = await fetch('/api/chat', {
 					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': 'text/event-stream'
+					},
 					body: JSON.stringify({ 
 						message: message,
 						session_id: sessionId
-					 })
+						})
 				});
-				
-				const data = await response.json();
-				
-				// Eliminar indicador de carga y mostrar respuesta real
+
+				const contentType = response.headers.get('content-type') || '';
+
+				// Red de seguridad: si el proxy devolvió JSON (error previo al
+				// stream) en lugar de SSE, lo mostramos como mensaje normal.
+				if (!contentType.includes('text/event-stream')) {
+					const data = await response.json();
+					document.getElementById('loading-indicator')?.remove();
+					addMessage(data.reply || 'Lo siento, tuve un problema técnico. ¿Podrías intentar de nuevo?', 'bot');
+					throw new Error('respuesta no-stream');
+				}
+
+				if (!response.body) throw new Error('stream sin body');
+
+				const reader = response.body.getReader();
+				const decoder = new TextDecoder('utf-8');
+				let buffer = '';
+
+				while (true) {
+					const { done, value } = await reader.read();
+					if (done) break;
+					buffer += decoder.decode(value, { stream: true });
+
+					// SSE separa los eventos con una línea en blanco.
+					let boundary = buffer.indexOf('\n\n');
+					while (boundary !== -1) {
+						handleFrame(buffer.slice(0, boundary));
+						buffer = buffer.slice(boundary + 2);
+						boundary = buffer.indexOf('\n\n');
+					}
+				}
+
 				document.getElementById('loading-indicator')?.remove();
-				addMessage(data.reply, 'bot');
+
+				if (streamError) {
+					const text = streamedText.trim()
+						? `${streamedText}\n\n_${streamError}_`
+						: streamError;
+					if (bubble) paintBubble(bubble, text);
+					else addMessage(text, 'bot');
+				} else {
+					const text = finalText || streamedText;
+					if (text.trim() && bubble) paintBubble(bubble, text);
+					else if (text.trim()) addMessage(text, 'bot');
+					else addMessage("Lo siento, tuve un problema procesando tu mensaje. ¿Podrías repetirlo?", 'bot');
+				}
 
 				// Actualizar estado a Online en la UI
-				const statusText = document.getElementById('chat-status-text');
-				if (statusText) {
-					statusText.className = "text-xs text-[#50C878] font-mono flex items-center gap-1";
-					statusText.innerHTML = '<span class="w-2 h-2 bg-[#50C878] rounded-full"></span>Online';
-				}
+				setChatStatus('online');
 
 			} catch (error) {
 				document.getElementById('loading-indicator')?.remove();
-				addMessage("Lo siento, tuve un problema técnico de conexión. ¿Podrías intentar de nuevo?", 'bot');
+				if (!bubble) {
+					addMessage("Lo siento, tuve un problema técnico de conexión. ¿Podrías intentar de nuevo?", 'bot');
+				}
 				console.error("Error en el chat:", error);
 			} finally {
 				// Liberamos el bloqueo al terminar (sea éxito o error)
