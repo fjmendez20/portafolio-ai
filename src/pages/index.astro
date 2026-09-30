@@ -847,7 +847,9 @@ const titulo = "AI Developer & Solutions Architect";
 
 		// 2. LA FUNCIÓN DEL BOTÓN
 		/** @param {'online'|'waking'|'offline'} state */
+		let agentStatus = 'waking';
 		function setChatStatus(state) {
+			agentStatus = state;
 			const statusText = document.getElementById('chat-status-text');
 			if (!statusText) return;
 			const map = {
@@ -862,25 +864,28 @@ const titulo = "AI Developer & Solutions Architect";
 
 		/**
 		 * Despierta el agente de Render free. El cold start puede tardar 30-50s,
-		 * así que se dispara al abrir el widget y el usuario escribe mientras.
-		 * @param {boolean} force
+		 * así que se dispara al abrir el widget y se espera antes de enviar si el
+		 * agente no está confirmado como online.
+		 * Devuelve la promesa del wake en curso para poder esperarla.
 		 */
-		let wakeInFlight = false;
-		async function wakeAgent(force = false) {
-			if (wakeInFlight && !force) return;
-			wakeInFlight = true;
+		let wakeInFlight = null;
+		async function wakeAgent() {
+			if (wakeInFlight) return wakeInFlight;
 			setChatStatus('waking');
-			try {
-				const res = await fetch('/api/wake');
-				const data = await res.json();
-				setChatStatus(data.status === 'awake' ? 'online' : 'online');
-				console.log('🟢 Wake:', JSON.stringify(data));
-			} catch (e) {
-				// No es crítico: si Render está despierto igual responderá.
-				console.warn('🟡 Wake sin respuesta:', e);
-			} finally {
-				wakeInFlight = false;
-			}
+			wakeInFlight = (async () => {
+				try {
+					const res = await fetch('/api/wake');
+					const data = await res.json();
+					setChatStatus(data.status === 'awake' ? 'online' : 'offline');
+					console.log('🟢 Wake:', JSON.stringify(data));
+				} catch (e) {
+					// No es crítico: si Render está despierto igual responderá.
+					console.warn('🟡 Wake sin respuesta:', e);
+					setChatStatus('offline');
+				}
+			})();
+			await wakeInFlight;
+			wakeInFlight = null;
 		}
 
 		function toggleChat() {
@@ -1043,6 +1048,13 @@ try {
 			if (chatMessages) {
 				chatMessages.appendChild(loadingDiv);
 				chatMessages.scrollTop = chatMessages.scrollHeight;
+			}
+
+			// Si el agente no está confirmado online, esperamos a que termine el
+			// wake. Así el cold start de Render lo cubre el wake y no el mensaje,
+			// que abortaría a los 45s mientras Render tarda 30-60s en despertar.
+			if (agentStatus !== 'online') {
+				await wakeAgent();
 			}
 
 			// 3. ÚNICA llamada a la API, ahora en streaming
