@@ -726,8 +726,51 @@ const titulo = "AI Developer & Solutions Architect";
 			</button>
 		</div>
 
-		<div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin bg-gradient-to-b from-[#0a192f] to-[#021336]">
-			<div id="initial-message-container"></div>
+		<div id="chat-messages" class="flex-1 overflow-y-auto p-4 scrollbar-thin bg-gradient-to-b from-[#0a192f] to-[#021336]">
+			<!--
+				Pantalla de arranque. Se muestra al abrir el widget y mantiene el input
+				bloqueado hasta que /api/wake confirma que Render dejó de hibernar: el
+				cold start del plan gratuito tarda 30-60s y escribir durante ese hueco
+				solo hacía que el usuario acumulara texto a ciegas.
+			-->
+			<div id="boot-splash" class="boot-splash h-full">
+				<div class="relative mb-7 flex items-center justify-center">
+					<span class="boot-ring"></span>
+					<span class="boot-ring"></span>
+					<span class="boot-ring"></span>
+					<img
+						src="/avatar.png"
+						alt=""
+						aria-hidden="true"
+						class="boot-avatar relative w-16 h-16 rounded-full object-cover border-2 border-[#50C878]/60 shadow-lg shadow-[#50C878]/20"
+					/>
+				</div>
+
+				<div class="w-full max-w-[290px] bg-slate-800 border border-slate-700 rounded-2xl rounded-tl-none p-4 text-left shadow-lg">
+					<div class="text-[10px] text-gray-500 font-bold mb-1.5 uppercase tracking-wider">Asistente AI</div>
+					<p class="text-sm text-gray-200 leading-relaxed min-h-[3.25rem]">
+						<span id="boot-typewriter"></span><span class="boot-caret" aria-hidden="true"></span>
+					</p>
+				</div>
+
+				<div class="w-full max-w-[290px] mt-5">
+					<div id="boot-track" class="h-1 w-full rounded-full bg-slate-700/60 overflow-hidden">
+						<div id="boot-bar" class="boot-bar"></div>
+					</div>
+					<div class="mt-2.5 flex items-center justify-between gap-3 font-mono text-[10px]">
+						<span id="boot-status-text" class="text-gray-400 text-left">Despertando el servidor…</span>
+						<span id="boot-counter" class="text-[#50C878] shrink-0">30s</span>
+					</div>
+				</div>
+
+				<button
+					type="button"
+					id="boot-skip"
+					class="mt-6 text-[11px] font-mono text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2"
+				>
+					Saltar espera
+				</button>
+			</div>
 		</div>
 
 		<div class="p-3 bg-slate-800/50 border-t border-slate-700 shrink-0">
@@ -834,6 +877,20 @@ const titulo = "AI Developer & Solutions Architect";
 		const chatMessages = document.getElementById("chat-messages");
 		/** @type {HTMLButtonElement | null} */
 		const sendBtn = document.getElementById("send-btn");
+		/** @type {HTMLElement | null} */
+		const bootSplash = document.getElementById("boot-splash");
+		/** @type {HTMLElement | null} */
+		const bootBar = document.getElementById("boot-bar");
+		/** @type {HTMLElement | null} */
+		const bootTrack = document.getElementById("boot-track");
+		/** @type {HTMLElement | null} */
+		const bootStatusText = document.getElementById("boot-status-text");
+		/** @type {HTMLElement | null} */
+		const bootCounter = document.getElementById("boot-counter");
+		/** @type {HTMLElement | null} */
+		const bootTypewriter = document.getElementById("boot-typewriter");
+		/** @type {HTMLButtonElement | null} */
+		const bootSkip = document.getElementById("boot-skip");
 
 		let isChatOpen = false;
 		// 0. GESTIÓN DE SESIÓN PROFESIONAL (localStorage)
@@ -848,8 +905,205 @@ const titulo = "AI Developer & Solutions Architect";
 		// 2. LA FUNCIÓN DEL BOTÓN
 		/** @param {'online'|'waking'|'offline'} state */
 		let agentStatus = 'waking';
+
+		/* ---------------------------------------------------------------
+		   Pantalla de arranque
+		   ---------------------------------------------------------------
+		   La barra se dibuja en 30s como referencia visual, pero lo que
+		   desbloquea el input es el estado REAL del agente: en cuanto
+		   /api/wake responde `awake` el header pasa a "Online" y se cierra
+		   la espera. Si Render despierta en 8s, el usuario espera 8s; si
+		   tarda 50s, la barra entra en modo "esperando" y la espera sigue.
+		   --------------------------------------------------------------- */
+		const CHAT_PLACEHOLDER = 'Pregúntame sobre sus proyectos...';
+		const BOOT_BAR_MS = 30_000;
+		const BOOT_STATUS_MS = 6_000;
+		/** Si el agente se despertó hace poco, Render sigue caliente. */
+		const AWAKE_TTL_MS = 15 * 60 * 1000;
+
+		const BOOT_STATUSES = [
+			'Despertando el servidor…',
+			'Cargando el contexto del portafolio…',
+			'Ajustando los modelos…',
+			'Casi listo, un segundo…',
+		];
+
+		let isBooting = true;
+		let bootStarted = false;
+		let bootCountdownTimer = 0;
+		let bootStatusTimer = 0;
+		/** @type {Promise<void> | null} */
+		let bootTyping = null;
+
+		function agentName() {
+			return window.PAGE_PROPS?.nombre || 'Fabian';
+		}
+
+		function greeting() {
+			return `¡Hola! Soy el asistente virtual de ${agentName()}. ¿En qué puedo ayudarte hoy?`;
+		}
+
+		function rememberAgentAwake() {
+			try {
+				localStorage.setItem('agent_awake_at', String(Date.now()));
+			} catch (e) {
+				/* modo privado: solo se pierde la optimización */
+			}
+		}
+
+		/** ¿Render sigue despierto según la última visita de este navegador? */
+		function isAgentWarm() {
+			try {
+				const at = Number(localStorage.getItem('agent_awake_at') || 0);
+				return at > 0 && Date.now() - at < AWAKE_TTL_MS;
+			} catch (e) {
+				return false;
+			}
+		}
+
+		/**
+		 * Bloquea o desbloquea la escritura. Durante el arranque el input estuvo
+		 * siempre editable: el usuario escribía, leía los 3 puntitos y acumulaba
+		 * texto a ciegas durante casi un minuto.
+		 * @param {boolean} enabled
+		 */
+		function setInputEnabled(enabled) {
+			if (chatInput) {
+				chatInput.disabled = !enabled;
+				chatInput.placeholder = enabled ? CHAT_PLACEHOLDER : 'Despertando el asistente…';
+				chatInput.setAttribute('aria-busy', enabled ? 'false' : 'true');
+			}
+			if (sendBtn) sendBtn.disabled = !enabled;
+		}
+
+		/**
+		 * Escribe el saludo carácter a carácter y devuelve una promesa que se
+		 * resuelve al terminar, para que finishBoot nunca lo corte a la mitad.
+		 * @param {string} text
+		 * @param {number} msPerChar
+		 * @returns {Promise<void>}
+		 */
+		function typewrite(text, msPerChar) {
+			return new Promise((resolve) => {
+				if (!bootTypewriter) return resolve();
+				bootTypewriter.textContent = '';
+				let i = 0;
+				const tick = () => {
+					i += 1;
+					bootTypewriter.textContent = text.slice(0, i);
+					if (i < text.length) {
+						window.setTimeout(tick, msPerChar);
+					} else {
+						resolve();
+					}
+				};
+				window.setTimeout(tick, msPerChar);
+			});
+		}
+
+		/** Cuenta atrás de la barra. Al llegar a 0 la barra pulsa, no se reinicia. */
+		function startBootCountdown() {
+			let remaining = BOOT_BAR_MS / 1000;
+			if (bootCounter) bootCounter.textContent = `${remaining}s`;
+			bootBar?.classList.add('boot-bar--running');
+			window.clearInterval(bootCountdownTimer);
+			bootCountdownTimer = window.setInterval(() => {
+				remaining = Math.max(0, remaining - 1);
+				if (bootCounter) {
+					bootCounter.textContent = remaining > 0 ? `${remaining}s` : 'lento…';
+				}
+				if (remaining === 0) bootTrack?.classList.add('boot-track--stalled');
+			}, 1000);
+		}
+
+		/** Rótulos que explican qué está pasando, en vez de una barra muda. */
+		function startBootStatus() {
+			let index = 0;
+			window.clearInterval(bootStatusTimer);
+			bootStatusTimer = window.setInterval(() => {
+				if (!bootStatusText) return;
+				index = (index + 1) % BOOT_STATUSES.length;
+				bootStatusText.textContent = BOOT_STATUSES[index];
+				// Reinicia la animación de entrada del texto.
+				bootStatusText.classList.remove('boot-status--swap');
+				void bootStatusText.offsetWidth;
+				bootStatusText.classList.add('boot-status--swap');
+			}, BOOT_STATUS_MS);
+		}
+
+		/**
+		 * Arranca la pantalla de arranque. Idempotente: reabrir el widget durante
+		 * la espera no reinicia ni el typewriter ni la cuenta atrás.
+		 */
+		function startBoot() {
+			if (!isBooting || bootStarted || !bootSplash) return;
+			bootStarted = true;
+
+			bootSplash.classList.remove('is-out');
+			bootSplash.classList.add('is-on');
+			setInputEnabled(false);
+
+			// Con Render ya caliente el mismo splash se muestra, pero el texto
+			// aparece mucho más rápido porque no hay nada que esperar.
+			bootTyping = typewrite(greeting(), isAgentWarm() ? 12 : 26);
+			startBootCountdown();
+			startBootStatus();
+		}
+
+		/**
+		 * Cierra la pantalla de arranque y habilita la escritura. La dispara el
+		 * estado real del agente (`online`), el botón de saltar, o el timeout de
+		 * /api/wake para no dejar al usuario atrapado.
+		 * @param {{ slow?: boolean }} [opts]
+		 */
+		async function finishBoot(opts) {
+			if (!isBooting) return;
+			const slow = opts?.slow === true;
+			isBooting = false;
+			bootStarted = false;
+
+			window.clearInterval(bootCountdownTimer);
+			window.clearInterval(bootStatusTimer);
+			bootBar?.classList.remove('boot-bar--running');
+			bootTrack?.classList.remove('boot-track--stalled');
+
+			// No cortamos el typewriter a la mitad: el saludo siempre queda legible.
+			if (bootTyping) await bootTyping;
+
+			const closingText = slow
+				? 'Tuve un arranque lento, pero ya podés escribirme. Con tu primera pregunta termino de despertar.'
+				: bootTypewriter?.textContent;
+
+			// Primero sacamos el splash del flujo; recién ahí entra el saludo como
+			// primera burbuja real, así no queda un hueco en medio del chat.
+			bootSplash?.classList.remove('is-on');
+			bootSplash?.classList.add('is-out');
+			window.setTimeout(() => {
+				bootSplash?.classList.remove('is-out');
+				if (closingText) addMessage(closingText, 'bot');
+			}, 360);
+
+			setInputEnabled(true);
+			if (isChatOpen) chatInput?.focus();
+		}
+
+		bootSkip?.addEventListener('click', () => finishBoot());
+
 		function setChatStatus(state) {
 			agentStatus = state;
+
+			// El estado del agente es lo que cierra la espera: en cuanto Render
+			// responde, el usuario puede escribir.
+			if (state === 'online' && isBooting) {
+				rememberAgentAwake();
+				finishBoot();
+			} else if (state === 'offline' && isBooting) {
+				// /api/wake agotó sus 45s. Dejar el input bloqueado para siempre
+				// sería peor que dejar escribir: el submit reintenta el wake en
+				// cada envío.
+				finishBoot({ slow: true });
+			}
+
 			const statusText = document.getElementById('chat-status-text');
 			if (!statusText) return;
 			const map = {
@@ -896,8 +1150,13 @@ const titulo = "AI Developer & Solutions Architect";
 			chatWindow?.classList.add("scale-100", "opacity-100");
 			toggleBtn?.classList.add("chat-open");
 			tooltip?.classList.add("hidden");
-			setTimeout(() => chatInput?.focus(), 300);
+			// La espera arranca antes que el wake: el splash y la petición a Render
+			// avanzan en paralelo, así se aprovecha todo el cold start.
+			startBoot();
 			wakeAgent();
+			setTimeout(() => {
+				if (!isBooting) chatInput?.focus();
+			}, 300);
 		} else {
 			chatWindow?.classList.remove("scale-100", "opacity-100");
 			chatWindow?.classList.add("scale-90", "opacity-0", "pointer-events-none", "invisible");
@@ -915,20 +1174,9 @@ const titulo = "AI Developer & Solutions Architect";
 		 * @param {string} text
 		 * @param {'user'|'bot'} sender
 		 */
-// 1. Saludo inicial estilo Fabian AI
-try {
-            const initContainer = document.getElementById('initial-message-container');
-            if (initContainer) {
-                const now = new Date();
-                const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
-                
-                initContainer.innerHTML = `
-                    <div class="mb-4">
-
-                    </div>
-                `;
-            }
-        } catch (e) {}
+// El saludo inicial lo escribe la pantalla de arranque (typewrite +
+		// finishBoot). Antes este bloque renderizaba un <div> vacío y el chat
+		// abría en blanco.
 
 		function addMessage(text, sender) {
             const isUser = sender === "user";
@@ -941,10 +1189,10 @@ try {
             const parsedText = isUser ? text : marked.parse(text);
 
             const wrapper = document.createElement("div");
-            wrapper.className = "mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300";
+            wrapper.className = "mb-6 msg-enter";
 
             wrapper.innerHTML = `
-                <div class="text-[10px] text-white-500 font-bold mb-1 ${isUser ? "text-right pr-2" : "pl-11"} uppercase tracking-wider">
+                <div class="text-[10px] text-gray-500 font-bold mb-1 ${isUser ? "text-right pr-2" : "pl-11"} uppercase tracking-wider">
                     ${isUser ? "Tú" : "Asistente AI"} <span class="font-normal opacity-95">${time}</span>
                 </div>
                 <div class="flex items-start gap-3 ${isUser ? "justify-end" : ""}">
@@ -968,9 +1216,9 @@ try {
 			const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).toLowerCase();
 
 			const wrapper = document.createElement("div");
-			wrapper.className = "mb-6 animate-in fade-in slide-in-from-bottom-2 duration-300";
+			wrapper.className = "mb-6 msg-enter";
 			wrapper.innerHTML = `
-				<div class="text-[10px] text-white-500 font-bold mb-1 pl-11 uppercase tracking-wider">
+				<div class="text-[10px] text-gray-500 font-bold mb-1 pl-11 uppercase tracking-wider">
 					Asistente AI <span class="font-normal opacity-95">${time}</span>
 				</div>
 				<div class="flex items-start gap-3">
@@ -1012,12 +1260,38 @@ try {
 		// Bandera de control para evitar spam de clics
 		let isProcessing = false;
 
+		// Indicador de "Asistente AI está escribiendo..." del exchanges normal
+		// (posterior al arranque, cuando ya se puede escribir).
+		function showTypingIndicator() {
+			document.getElementById('loading-indicator')?.remove();
+			const loadingDiv = document.createElement("div");
+			loadingDiv.id = "loading-indicator";
+			loadingDiv.className = "mb-6 msg-enter";
+			loadingDiv.innerHTML = `
+				<div class="text-[10px] text-gray-500 font-bold mb-1 pl-11 uppercase tracking-wider">Asistente AI</div>
+				<div class="flex items-start gap-3">
+					<img src="/avatar.png" alt="" class="w-8 h-8 rounded-full border border-slate-700 shrink-0 object-cover" />
+					<div class="bg-slate-800 p-4 rounded-2xl rounded-tl-none border border-slate-700 flex gap-1">
+						<span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce"></span>
+						<span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+						<span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+					</div>
+				</div>
+			`;
+			if (chatMessages) {
+				chatMessages.appendChild(loadingDiv);
+				chatMessages.scrollTop = chatMessages.scrollHeight;
+			}
+		}
+
 		// Manejo del envío del formulario
 		chatForm?.addEventListener("submit", async (e) => {
 			e.preventDefault();
-			
+
 			// Si ya está procesando una petición, bloqueamos las siguientes
 			if (isProcessing) return;
+			// Cinturón de seguridad: durante el arranque el input ya está deshabilitado.
+			if (isBooting) return;
 
 			const message = (chatInput?.value || "").trim();
 			if (!message) return;
@@ -1030,32 +1304,18 @@ try {
 			addMessage(message, "user");
 			if (chatInput) chatInput.value = "";
 
-			// 2. Mostrar indicador de "Escribiendo..." temporal
-			const loadingDiv = document.createElement("div");
-            loadingDiv.id = "loading-indicator";
-            loadingDiv.className = "mb-6";
-            loadingDiv.innerHTML = `
-                <div class="text-[10px] text-gray-500 font-bold mb-1 pl-11">ASISTENTE AI</div>
-                <div class="flex items-start gap-3">
-                    <img src="/avatar.png" class="w-8 h-8 rounded-full border border-slate-700 shrink-0 object-cover" />
-                    <div class="bg-slate-800 p-4 rounded-2xl rounded-tl-none border border-slate-700 flex gap-1">
-                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce"></span>
-                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
-                        <span class="w-1.5 h-1.5 bg-[#50C878] rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
-                    </div>
-                </div>
-            `;
-			if (chatMessages) {
-				chatMessages.appendChild(loadingDiv);
-				chatMessages.scrollTop = chatMessages.scrollHeight;
-			}
-
 			// Si el agente no está confirmado online, esperamos a que termine el
 			// wake. Así el cold start de Render lo cubre el wake y no el mensaje,
 			// que abortaría a los 45s mientras Render tarda 30-60s en despertar.
+			//
+			// El indicador va DESPUÉS del wake a propósito: antes se insertaba antes
+			// de esperar, así que el usuario veía "escribiendo..." durante el cold
+			// start, cuando el modelo todavía no había generado ni un token.
 			if (agentStatus !== 'online') {
 				await wakeAgent();
 			}
+
+			showTypingIndicator();
 
 			// 3. ÚNICA llamada a la API, ahora en streaming
 			/** @type {HTMLElement | null} */
@@ -1175,7 +1435,16 @@ try {
 		});
 	</script>
 
-	<style>
+	<!--
+		is:global es OBLIGATORIO acá. Por defecto Astro scopea los estilos de un
+		componente a `data-astro-cid-*`, atributo que solo reciben los elementos del
+		propio template. Casi todo el chat se arma con document.createElement +
+		innerHTML, así que sus nodos (y los <p>/<ul>/<code> que genera marked.parse)
+		nunca llevan ese atributo y las reglas nunca aplicaban: .msg-enter y las 12
+		rules de .markdown-chat estaban muertas. Los nombres de clase son lo
+		suficientemente específicos como para no contaminar el resto del sitio.
+	-->
+	<style is:global>
 		.scrollbar-thin::-webkit-scrollbar {
 			width: 6px;
 		}
@@ -1251,6 +1520,142 @@ try {
         }
         .animate-bounce-slow {
             animation: bounce-slow 3s infinite ease-in-out;
+        }
+
+		/* -------------------------------------------------
+		   Pantalla de arranque del chat (ver startBoot/finishBoot)
+		   ------------------------------------------------- */
+        /* `display` se controla acá y no con `hidden`: las utilidades hidden/flex
+           de Tailwind compiten por la misma propiedad y el resultado depende del
+           orden del CSS generado, no del orden de las clases en el HTML. */
+        #boot-splash {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        #boot-splash.is-on { display: flex; }
+        #boot-splash.is-out { display: flex; }
+
+        /* Anillos que se expanden desde el avatar mientras Render hiberna/despierta */
+        @keyframes boot-ripple {
+            0%   { transform: scale(0.72); opacity: 0.5; }
+            100% { transform: scale(1.55); opacity: 0; }
+        }
+        .boot-ring {
+            position: absolute;
+            /* inset+margin:auto centra el anillo sobre el avatar en vez de
+               dejarlo pegado al origen del contenedor flex. */
+            inset: 0;
+            margin: auto;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            border: 2px solid rgba(80, 200, 120, 0.65);
+            animation: boot-ripple 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+        }
+        /* Escalonados para que parezcan ondas en lugar de un pulso único */
+        .boot-ring:nth-of-type(2) { animation-delay: 0.8s; }
+        .boot-ring:nth-of-type(3) { animation-delay: 1.6s; }
+
+        @keyframes boot-pulse {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.06); }
+        }
+        .boot-avatar { animation: boot-pulse 2.4s ease-in-out infinite; }
+
+        /* Caret del typewriter */
+        @keyframes boot-blink {
+            0%, 45%   { opacity: 1; }
+            55%, 100% { opacity: 0; }
+        }
+        .boot-caret {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            background: #50C878;
+            animation: boot-blink 1s steps(1) infinite;
+        }
+
+        /* Barrido de brillo que recorre la barra */
+        @keyframes boot-sheen {
+            from { transform: translateX(-120%); }
+            to   { transform: translateX(320%); }
+        }
+
+        /* La barra barre 30s como escala visual. El desbloqueo real del input no
+           lo dispara esta animación, sino la respuesta de /api/wake. */
+        @keyframes boot-fill {
+            from { width: 0%; }
+            to   { width: 100%; }
+        }
+        .boot-bar {
+            position: relative;
+            overflow: hidden;
+            width: 0%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #3db868, #50C878);
+            box-shadow: 0 0 12px rgba(80, 200, 120, 0.45);
+        }
+        .boot-bar::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+            animation: boot-sheen 1.8s ease-in-out infinite;
+        }
+        .boot-bar--running { animation: boot-fill 30s linear forwards; }
+
+        /* Si Render pasa los 30s, la barra deja de avanzar y el riel pulsa: el
+           usuario tiene que ver que seguimos intentando en lugar de una barra
+           muerta. El pulso va en el RIEL y no en la barra a propósito: si se
+           animara la barra, esta regla pisaría `animation: boot-fill` y la
+           barra volvería a 0%. */
+        @keyframes boot-stall {
+            0%, 100% { opacity: 1; }
+            50%      { opacity: 0.3; }
+        }
+        #boot-track.boot-track--stalled { animation: boot-stall 1.2s ease-in-out infinite; }
+
+        /* Cambio de texto de estado */
+        @keyframes boot-swap {
+            0%   { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        #boot-status-text.boot-status--swap { animation: boot-swap 500ms ease-out both; }
+
+        /* Entrada y salida de la pantalla de arranque */
+        @keyframes boot-enter {
+            from { opacity: 0; transform: translateY(10px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes boot-exit {
+            from { opacity: 1; transform: scale(1); }
+            to   { opacity: 0; transform: scale(0.95); }
+        }
+        #boot-splash.is-on { animation: boot-enter 400ms ease-out both; }
+        #boot-splash.is-out { animation: boot-exit 350ms ease-in both; }
+
+        /* Entrada de las burbujas. Reemplaza las clases `animate-in fade-in
+           slide-in-from-bottom-2` de tailwindcss-animate: ese plugin no está
+           instalado, así que las entradas nunca se animaban. */
+        @keyframes msg-enter {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .msg-enter { animation: msg-enter 300ms ease-out both; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .boot-ring, .boot-avatar, .boot-caret, .boot-bar::after,
+            #boot-track.boot-track--stalled { animation: none !important; }
+            .boot-caret { opacity: 1; }
+            .msg-enter, #boot-splash.is-on, #boot-splash.is-out, #boot-status-text.boot-status--swap {
+                animation-duration: 1ms !important;
+            }
         }
 	</style>
 	<script>
